@@ -1,6 +1,7 @@
 from django.db import models
 
 from base.validators import phone_number_validation, filter_validator
+from notifications.tasks import send_mailing
 
 
 class Client(models.Model):
@@ -32,6 +33,16 @@ class Mailing(models.Model):
     sent_count = models.IntegerField(default=0)
     total_count = models.IntegerField(default=0)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_sent_count = self.sent_count
+        self.__original_total_count = self.total_count
+
+    def save(self, *args, **kwargs):
+        if self.sent_count == self.__original_sent_count and self.total_count == self.__original_total_count:
+            send_mailing.delay(self.id)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f'{self.text[:20]}'
 
@@ -50,6 +61,3 @@ class Message(models.Model):
 
     def __str__(self):
         return f'{self.client} {self.mailing} {self.status}'
-
-    class Meta:
-        unique_together = ('client', 'mailing')
