@@ -39,11 +39,15 @@ class Mailing(models.Model):
 
 class Message(models.Model):
     """ Message model """
+    STATUS_CHOICES = (
+        ('sent', 'Sent'),
+        ('failed', 'Failed'),
+    )
+
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE)
-    send_time = models.DateTimeField(null=True, blank=True, auto_now_add=True)
-    status = models.CharField(max_length=50, null=True, blank=True)
-    error = models.CharField(max_length=50, null=True, blank=True)
+    send_time = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
 
     def __str__(self):
         return f'{self.client} {self.mailing} {self.status}'
