@@ -19,6 +19,7 @@ INSTALLED_APPS = [
 
     'drf_yasg',
     'rest_framework',
+    'social_django',
 
     'notifications'
 ]
@@ -53,8 +54,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.yandex.YandexOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 DATABASES = {
     'default': {
@@ -105,20 +109,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGGING = {
-    'version': 1,
-    'handlers': {
-        'console': {'class': 'logging.StreamHandler'}
-    },
-    'loggers': {
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        }
-
-    }
-}
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -126,3 +116,13 @@ REST_FRAMEWORK = {
 }
 
 CELERY_BROKER_URL = 'redis://redis:6379/0'
+
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/api/v1/docs'
+
+SOCIAL_AUTH_YANDEX_OAUTH2_KEY = '7a54d4b7aa134b3583a7114f75e6fed1'
+SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = '091f56ba979546248b4f65dbf0a16639'
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '51639145'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'LEsjs9FjtnNKHX8nRO7x'
