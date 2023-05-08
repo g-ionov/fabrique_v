@@ -28,3 +28,63 @@ services:
       - POSTGRES_DB=notification_service
       - POSTGRES_USER=db_user
       - POSTGRES_PASSWORD=db_password
+
+  redis:
+    image: redis:7.0-alpine3.17
+    hostname: redis
+    ports:
+      - "6379:6379"
+
+  worker:
+    build:
+      context: .
+    hostname: worker
+    environment:
+      DB_HOST: database
+      DB_NAME: notification_service
+      DB_USER: db_user
+      DB_PASSWORD: db_password
+    entrypoint: celery
+    command: -A celery_app.app worker --loglevel=info
+    volumes:
+      - ./notification_service:/notification_service
+    links:
+      - redis
+    depends_on:
+      - redis
+      - database
+
+  worker2:
+    build:
+      context: .
+    hostname: worker2
+    environment:
+      DB_HOST: database
+      DB_NAME: notification_service
+      DB_USER: db_user
+      DB_PASSWORD: db_password
+    entrypoint: celery
+    command: -A celery_app.app worker --loglevel=info
+    volumes:
+      - ./notification_service:/notification_service
+    links:
+      - redis
+    depends_on:
+      - redis
+      - database
+
+
+  flower:
+    build:
+      context: .
+    hostname: flower
+    entrypoint: celery
+    command: -A celery_app.app flower --port=5555
+    volumes:
+      - ./notification_service:/notification_service
+    links:
+      - redis
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis

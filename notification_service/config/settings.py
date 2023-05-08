@@ -124,3 +124,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
