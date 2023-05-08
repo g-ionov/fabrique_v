@@ -13,11 +13,10 @@ class ClientAdmin(admin.ModelAdmin):
 
 @admin.register(Mailing)
 class MailingAdmin(admin.ModelAdmin):
-    list_display = (
-    'id', 'short_text', 'tag_filter', 'operator_code_filter', 'start_time', 'end_time', 'sent_count', 'total_count')
+    list_display = ('id', 'short_text', 'filter_params', 'start_time', 'end_time', 'sent_count', 'total_count')
     list_display_links = ('id', 'short_text')
-    list_filter = ('tag_filter', 'operator_code_filter')
-    search_fields = ('text', 'tag_filter')
+    list_filter = ('filter_params',)
+    search_fields = ('text', 'filter_params')
     readonly_fields = ('sent_count', 'total_count')
 
     def short_text(self, obj):
