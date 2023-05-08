@@ -15,7 +15,7 @@ class Client(models.Model):
         self.__original_phone_number = self.phone_number
 
     def save(self, *args, **kwargs):
-        if self.phone_number != self.__original_phone_number:
+        if self.phone_number != self.__original_phone_number or not self.operator_code:
             self.operator_code = self.phone_number[1:4]
         super().save(*args, **kwargs)
 
