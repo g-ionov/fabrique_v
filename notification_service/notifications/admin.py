@@ -26,8 +26,8 @@ class MailingAdmin(admin.ModelAdmin):
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'client', 'mailing', 'send_time', 'status', 'error')
+    list_display = ('id', 'client', 'mailing', 'send_time', 'status')
     list_display_links = ('id', 'client', 'mailing')
-    list_filter = ('status', 'error')
+    list_filter = ('status',)
     search_fields = ('client__phone_number', 'mailing__text')
-    readonly_fields = ('send_time', 'status', 'error')
+    readonly_fields = ('send_time', 'status')
