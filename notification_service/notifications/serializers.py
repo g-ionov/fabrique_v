@@ -24,4 +24,4 @@ class MailingSerializer(serializers.ModelSerializer):
 class MailingCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mailing
-        fields = ('start_time', 'end_time', 'text', 'operator_code_filter', 'tag_filter')
+        fields = ('start_time', 'end_time', 'text', 'filter_params')
