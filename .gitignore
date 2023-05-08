@@ -1,0 +1,16 @@
+.idea
+
+venv
+
+!postgres_data
+postgres_data/**
+
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+
+__pycache__/
+*/__pycache__/
+*.py[cod]
+.pyc
+*.pyc
