@@ -20,7 +20,7 @@ class MailingAdmin(admin.ModelAdmin):
     readonly_fields = ('sent_count', 'total_count')
 
     def short_text(self, obj):
-        return f'{obj.text[:50]}...'
+        return f'{obj.text[:50]}...' if len(obj.text) > 50 else obj.text
 
 
 @admin.register(Message)
