@@ -1,6 +1,6 @@
 from django.db import models
 
-from base.validators import phone_number_validation
+from base.validators import phone_number_validation, filter_validator
 
 
 class Client(models.Model):
@@ -28,8 +28,7 @@ class Mailing(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(null=True, blank=True)
     text = models.TextField()
-    operator_code_filter = models.CharField(max_length=3, null=True, blank=True)
-    tag_filter = models.CharField(max_length=50, null=True, blank=True)
+    filter_params = models.JSONField(default=dict, validators=[filter_validator])
     sent_count = models.IntegerField(default=0)
     total_count = models.IntegerField(default=0)
 
@@ -44,8 +43,8 @@ class Message(models.Model):
         ('failed', 'Failed'),
     )
 
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='messages')
+    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, related_name='messages')
     send_time = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
 
