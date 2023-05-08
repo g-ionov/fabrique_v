@@ -22,6 +22,8 @@ def filter_validator(filter_params: dict)-> bool:
         raise ValidationError("Filter params are required")
     if not isinstance(filter_params, dict):
         raise ValidationError("Filter params must be a dict")
+    if len(filter_params) > 2:
+        raise ValidationError("Filter params must contain only operator_code and tag")
     for key, value in filter_params.items():
         if key not in ('operator_code', 'tag'):
             raise ValidationError(f"Filter param {key} is invalid")
